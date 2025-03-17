@@ -17,11 +17,9 @@ export class ListService {
         return this.prisma.list.findUnique({ where: { id } });
     }
     
-    async createList(title: string, itemsInList: string[], status:boolean) {
+    async createList(title: string, items: string[], status:boolean) {
         return this.prisma.list.create({ 
-            data : { 
-                title, itemsInList, status 
-            }, });
+            data : { title, items, status }, });
     }
 
     async deleteList(id: number) {

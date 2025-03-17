@@ -13,9 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  userId   Int    @id @default(autoincrement())
+  email    String
+  password String
+  username String
+}
+
 model List {
-     id    Int     @id @default(autoincrement())
-     title  String
-     itemsInList String[]  //@unique
-     status Boolean
-   }
+  id     Int      @id @default(autoincrement())
+  title  String
+  status Boolean
+  items  String[] //@unique
+}
+
+// model ListItem {
+//   list       List    @relation(fields: [itemId], references: [id])
+//   itemId     Int     @id @default(autoincrement())
+//   itemTitle  String
+//   itemStatus Boolean
+// }

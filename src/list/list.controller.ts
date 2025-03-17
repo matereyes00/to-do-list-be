@@ -18,7 +18,7 @@ export class ListController {
 
     @Post()
     async createList(@Body() dto: ListDto){
-        return this.listService.createList(dto.title, dto.itemInList, dto.status);
+        return this.listService.createList(dto.title, dto.itemsInList, dto.status);
     }
 
     @Delete(':id')

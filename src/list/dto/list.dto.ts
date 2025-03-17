@@ -1,5 +1,5 @@
 export class ListDto {
     title: string;
-    itemInList: string[];
+    itemsInList: string[];
     status: boolean;
   }
