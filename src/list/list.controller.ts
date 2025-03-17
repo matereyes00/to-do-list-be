@@ -4,25 +4,25 @@ import { ListDto } from './dto/list.dto';
 
 @Controller('list')
 export class ListController {
-    constructor(private readonly listService: ListService) {}
+  constructor(private readonly listService: ListService) {}
 
-    @Get()
-   async getLists() {
-     return this.listService.getLists();
-   }
+  @Get()
+  async getLists() {
+    return this.listService.getLists();
+  }
 
-   @Get(':id')
-   async getList(@Param('id') id: number) {
-    return this.listService.getList(Number(id)); 
-}
+  @Get(':id')
+  async getList(@Param('id') id: number) {
+    return this.listService.getList(Number(id));
+  }
 
-    @Post()
-    async createList(@Body() dto: ListDto){
-        return this.listService.createList(dto.title, dto.itemsInList, dto.status);
-    }
+  @Post()
+  async createList(@Body() dto: ListDto) {
+    return this.listService.createList(dto.title, dto.itemsInList, dto.status);
+  }
 
-    @Delete(':id')
-    async deleteList(@Param('id') id:number) {
-        return this.listService.deleteList(Number(id));
-    }
+  @Delete(':id')
+  async deleteList(@Param('id') id: number) {
+    return this.listService.deleteList(Number(id));
+  }
 }
