@@ -26,4 +26,5 @@ export class UsersController {
   async createUser(@Body() dto: UserDto) {
     return this.userService.createUser(dto.email, dto.username, dto.password);
   }
+
 }

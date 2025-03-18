@@ -5,24 +5,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ListService {
   constructor(private prisma: PrismaService) {}
 
-  // getLists(): string[] {
-  //     return ['Grocery', 'Watchlist', 'Things to finish', 'Bucket List'];
-  //   }
-  async getLists() {
+  async getUserList() {
     return this.prisma.list.findMany();
   }
 
-  async getList(id: number) {
-    return this.prisma.list.findUnique({ where: { id } });
-  }
-
-  async createList(title: string, items: string[], status: boolean) {
+  async createList(title: string, itemsInList: string[], status: boolean, userId:number) {
     return this.prisma.list.create({
-      data: { title, items, status },
+      data: { title, items: itemsInList, status, listUserId:userId },
     });
-  }
-
-  async deleteList(id: number) {
-    return this.prisma.list.delete({ where: { id } });
   }
 }

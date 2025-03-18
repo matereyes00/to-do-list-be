@@ -44,4 +44,8 @@ export class AuthService {
             accessToken, userId:user.userId, username:user.username
         }
     }
+
+    async signOut(authDtoResult: AuthDtoResult) {
+       authDtoResult.accessToken="" 
+    }
 }

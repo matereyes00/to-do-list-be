@@ -1,5 +1,6 @@
-import { Controller, Request, HttpCode, NotImplementedException, Post, HttpStatus, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Request, HttpCode, NotImplementedException, Post, HttpStatus, Body, Get, UseGuards, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthDtoResult } from './dto/auth.result.dto';
 import { AuthDto } from './dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthGuard } from './guards/auth.guard'
@@ -14,6 +15,12 @@ export class AuthController {
     @Post('login')
     login(@Body() authDto:AuthDto) {
         return this.authService.authenticate(authDto);
+    }
+
+    @UseGuards(AuthGuard)
+    @Delete('logout')
+    logout(@Body() authDto:AuthDtoResult) {
+        return this.authService.signOut(authDto);
     }
 
     @UseGuards(AuthGuard)
