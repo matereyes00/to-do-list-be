@@ -1,5 +1,5 @@
 export class AuthDtoResult {
-    accessToken: string;
-    userId: number;
-    username: string;
+  accessToken: string;
+  userId: number;
+  username: string;
 }

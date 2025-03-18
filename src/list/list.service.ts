@@ -9,9 +9,14 @@ export class ListService {
     return this.prisma.list.findMany();
   }
 
-  async createList(title: string, itemsInList: string[], status: boolean, userId:number) {
+  async createList(
+    title: string,
+    itemsInList: string[],
+    status: boolean,
+    userId: number,
+  ) {
     return this.prisma.list.create({
-      data: { title, items: itemsInList, status, listUserId:userId },
+      data: { title, items: itemsInList, status, listUserId: userId },
     });
   }
 }

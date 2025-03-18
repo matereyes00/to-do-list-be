@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Body, Post, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Body,
+  Post,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ListService } from './list.service';
 import { ListDto } from './dto/list.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
@@ -24,6 +33,11 @@ export class ListController {
     if (!userId) {
       throw new Error('User not authenticated');
     }
-    return this.listService.createList(dto.title, dto.itemsInList, dto.status, userId);
+    return this.listService.createList(
+      dto.title,
+      dto.itemsInList,
+      dto.status,
+      userId,
+    );
   }
 }

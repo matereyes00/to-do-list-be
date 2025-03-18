@@ -8,52 +8,65 @@ import { AuthSignUpDto } from './dto/auth.signUp.dto';
 
 @Injectable()
 export class AuthService {
-    constructor(private jwtService : JwtService,
-        private prisma: PrismaService,
-    ) {}
-    
-    async authenticate(authDto: AuthDto): Promise<AuthDtoResult> { // checks users credentials and generates an access token if validation succeeds.
-        const user = await this.validateUser(authDto);
-        if (!user) { throw new UnauthorizedException(); }
-        return this.signIn(user)
-    }
-    
-    async validateUser(authDto: AuthDto): Promise<SignInDto | null> { //compare username and pw if they match the ones existing sa db
-        const user = await this.prisma.user.findUnique({// find user by username
-            where: {
-                username: authDto.username
-            }
-        })
-        console.log("Found user:", user); // Debugging
-        
-        if (user && user.password === authDto.password) {
-            console.log("Password match!"); // Debugging
-            return {
-                userId: user.userId, username: user.username,
-            };
-        } 
-        return null;
-    }
+  constructor(
+    private jwtService: JwtService,
+    private prisma: PrismaService,
+  ) {}
 
-    async signIn(user: SignInDto): Promise<AuthDtoResult> {
-        const tokenPayload = {
-            sub: user.userId,
-            username: user.username,
-        };
-        const accessToken = await this.jwtService.signAsync(tokenPayload);
-        return {
-            accessToken, userId:user.userId, username:user.username
-        }
+  async authenticate(authDto: AuthDto): Promise<AuthDtoResult> {
+    // checks users credentials and generates an access token if validation succeeds.
+    const user = await this.validateUser(authDto);
+    if (!user) {
+      throw new UnauthorizedException();
     }
- 
-    async signUp(dto: AuthSignUpDto) {
-        const user = this.prisma.user.create({
-            data : {email:dto.email, username:dto.username, password:dto.password}
-        });
-        return user;
-    }
+    return this.signIn(user);
+  }
 
-    async signOut(authDtoResult: AuthDtoResult) {
-       authDtoResult.accessToken="" 
+  async validateUser(authDto: AuthDto): Promise<SignInDto | null> {
+    //compare username and pw if they match the ones existing sa db
+    const user = await this.prisma.user.findUnique({
+      // find user by username
+      where: {
+        username: authDto.username,
+      },
+    });
+    console.log('Found user:', user); // Debugging
+
+    if (user && user.password === authDto.password) {
+      console.log('Password match!'); // Debugging
+      return {
+        userId: user.userId,
+        username: user.username,
+      };
     }
+    return null;
+  }
+
+  async signIn(user: SignInDto): Promise<AuthDtoResult> {
+    const tokenPayload = {
+      sub: user.userId,
+      username: user.username,
+    };
+    const accessToken = await this.jwtService.signAsync(tokenPayload);
+    return {
+      accessToken,
+      userId: user.userId,
+      username: user.username,
+    };
+  }
+
+  async signUp(dto: AuthSignUpDto) {
+    const user = this.prisma.user.create({
+      data: {
+        email: dto.email,
+        username: dto.username,
+        password: dto.password,
+      },
+    });
+    return user;
+  }
+
+  async signOut(authDtoResult: AuthDtoResult) {
+    authDtoResult.accessToken = '';
+  }
 }

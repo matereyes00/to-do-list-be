@@ -10,9 +10,9 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-    // async getUser(userId: number) {
-    //   return this.prisma.user.findUnique({ where: { userId:userId } });
-    // }
+  // async getUser(userId: number) {
+  //   return this.prisma.user.findUnique({ where: { userId:userId } });
+  // }
 
   async getUserByName(username: string) {
     return this.prisma.user.findUnique({

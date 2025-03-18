@@ -10,14 +10,14 @@ import { JWT_SECRET } from './configs/jwt-secret';
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
-  imports : [
-    UsersModule, 
+  imports: [
+    UsersModule,
     PrismaModule,
     JwtModule.register({
       global: true,
       secret: JWT_SECRET,
-      signOptions: { expiresIn:'1d'},
-    })
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
 })
 export class AuthModule {}
