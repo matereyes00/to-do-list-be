@@ -12,10 +12,10 @@ export class UsersController {
     return this.userService.getUsers();
   }
 
-  //   @Get(':id')
-  //   async getUser(@Param('id') id: number) {
-  //     return this.userService.getUser(Number(id));
-  //   }
+    // @Get(':id')
+    // async getUser(@Param('id') id: number) {
+    //   return this.userService.getUser(Number(id));
+    // }
 
   @Get(':username')
   async getUserByName(@Param('username') user: string) {
