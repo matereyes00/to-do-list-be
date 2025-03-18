@@ -4,21 +4,28 @@ import { AuthDtoResult } from './dto/auth.result.dto';
 import { AuthDto } from './dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthGuard } from './guards/auth.guard'
+import {AuthSignUpDto} from './dto/auth.signUp.dto'
 
 @Controller('auth')
 export class AuthController {
 
-        constructor(private prisma: PrismaService,
+    constructor(private prisma: PrismaService,
             private authService: AuthService, ) {}
 
+    @Post('signUp')
+    signUp(@Body() authSignUpDto: AuthSignUpDto) {
+        return this.authService.signUp(authSignUpDto);
+    }
+
     @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
     @Post('login')
     login(@Body() authDto:AuthDto) {
         return this.authService.authenticate(authDto);
     }
 
-    @UseGuards(AuthGuard)
     @Delete('logout')
+    @UseGuards(AuthGuard)
     logout(@Body() authDto:AuthDtoResult) {
         return this.authService.signOut(authDto);
     }

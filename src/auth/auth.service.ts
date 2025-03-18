@@ -4,6 +4,7 @@ import { SignInDto } from './dto/signin.dto';
 import { AuthDtoResult } from './dto/auth.result.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { AuthSignUpDto } from './dto/auth.signUp.dto';
 
 @Injectable()
 export class AuthService {
@@ -43,6 +44,13 @@ export class AuthService {
         return {
             accessToken, userId:user.userId, username:user.username
         }
+    }
+ 
+    async signUp(dto: AuthSignUpDto) {
+        const user = this.prisma.user.create({
+            data : {email:dto.email, username:dto.username, password:dto.password}
+        });
+        return user;
     }
 
     async signOut(authDtoResult: AuthDtoResult) {
