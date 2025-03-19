@@ -5,25 +5,29 @@ import { UserDto } from './dto/user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+    constructor(private readonly userService: UsersService) {}
 
-  @Get()
-  async getUsers() {
-    return this.userService.getUsers();
-  }
+    @Get()
+    async getUsers() {
+        return this.userService.getUsers();
+    }
 
-  // @Get(':id')
-  // async getUser(@Param('id') id: number) {
-  //   return this.userService.getUser(Number(id));
-  // }
+    // @Get(':id')
+    // async getUser(@Param('id') id: number) {
+    //   return this.userService.getUser(Number(id));
+    // }
 
-  @Get(':username')
-  async getUserByName(@Param('username') user: string) {
-    return this.userService.getUserByName(user);
-  }
+    @Get(':username')
+    async getUserByName(@Param('username') user: string) {
+        return this.userService.getUserByName(user);
+    }
 
-  @Post()
-  async createUser(@Body() dto: UserDto) {
-    return this.userService.createUser(dto.email, dto.username, dto.password);
-  }
+    @Post()
+    async createUser(@Body() dto: UserDto) {
+        return this.userService.createUser(
+            dto.email,
+            dto.username,
+            dto.password,
+        );
+    }
 }
