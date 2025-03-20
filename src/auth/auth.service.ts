@@ -1,10 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { SignInDto } from './dto/signin.dto';
 import { AuthDtoResult } from './dto/auth.result.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthSignUpDto } from './dto/auth.signUp.dto';
+import { REFRESH_JWT_SECRET, REFRESH_JWT_EXPIRES_IN } from './configs/refresh-jwt.config';
+import { AuthJwtPayload } from './dto/auth.jwt-payload';
 
 @Injectable()
 export class AuthService {
@@ -41,10 +43,15 @@ export class AuthService {
             username: user.username,
         };
         const accessToken = await this.jwtService.signAsync(tokenPayload);
+        const refreshToken = await this.jwtService.signAsync(tokenPayload, {
+            secret:REFRESH_JWT_SECRET,
+            expiresIn: REFRESH_JWT_EXPIRES_IN
+        });
         return {
             userId: user.userId,
             username: user.username,
             accessToken,
+            refreshToken
         };
     }
 
@@ -57,5 +64,14 @@ export class AuthService {
             },
         });
         return user;
+    }
+ 
+    async refreshToken(userId: number, username: string) {
+        const tokenPayload = { sub: userId, username: username };
+        const newAccessToken = this.jwtService.sign(tokenPayload);
+        return {
+            user_id: userId,
+            access_token: newAccessToken
+        };
     }
 }

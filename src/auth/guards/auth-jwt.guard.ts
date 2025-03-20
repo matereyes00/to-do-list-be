@@ -5,10 +5,9 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
     //check if jwt token is valid
     constructor(private jwtService: JwtService) {}
 
@@ -21,7 +20,6 @@ export class AuthGuard implements CanActivate {
         }
         try {
             const tokenPayload = await this.jwtService.verifyAsync(token);
-            await this.jwtService.verifyAsync(token);
             request.user = {
                 userId: tokenPayload.sub,
                 username: tokenPayload.username,

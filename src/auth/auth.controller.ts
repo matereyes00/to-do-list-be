@@ -7,6 +7,7 @@ import {
     HttpStatus,
     Body,
     Get,
+    Req,
     UseGuards,
     Delete,
 } from '@nestjs/common';
@@ -14,8 +15,9 @@ import { AuthService } from './auth.service';
 import { AuthDtoResult } from './dto/auth.result.dto';
 import { AuthDto } from './dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthGuard } from './guards/auth.guard';
+import { JwtAuthGuard } from './guards/auth-jwt.guard';
 import { AuthSignUpDto } from './dto/auth.signUp.dto';
+import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -27,20 +29,19 @@ export class AuthController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @UseGuards(AuthGuard)
     @Post('login')
     login(@Body() authDto: AuthDto) {
         return this.authService.authenticate(authDto);
     }
 
-    // @Delete('logout')
-    // @UseGuards(AuthGuard)
-    // logout(@Body() authDto: AuthDtoResult) {
-    //     return this.authService.signOut(authDto);
-    // }
+    @Post('refresh')
+    @UseGuards(RefreshAuthGuard)
+    refreshToken(@Request() request) {
+        return this.authService.refreshToken(request.user.sub, request.user.username);
+    }
 
-    @UseGuards(AuthGuard)
     @Get('me') // only accessible for authenticated users
+    @UseGuards(JwtAuthGuard)
     getUserInfo(@Request() request) {
         return request.user;
     }
