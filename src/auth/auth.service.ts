@@ -78,7 +78,6 @@ export class AuthService {
        await this.userService.updateHashedRefreshToken(userId, '');
        return {
         message: `User ${userId} was logged out`,
-        refresh_token: user?.hashedRefreshToken
        }
     }
 

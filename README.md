@@ -24,6 +24,7 @@
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This repository is my introduction to NestJS. This repo is a basic to-do list application using API calls. I used Postman to validate the endpoints of each API call.
 
 ## Project setup
 
