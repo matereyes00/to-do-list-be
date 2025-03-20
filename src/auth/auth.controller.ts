@@ -12,16 +12,17 @@ import {
     Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDtoResult } from './dto/auth.result.dto';
 import { AuthDto } from './dto/auth.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtAuthGuard } from './guards/auth-jwt.guard';
 import { AuthSignUpDto } from './dto/auth.signUp.dto';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private userService: UsersService,
+        private authService: AuthService) {}
 
     @Post('signUp')
     signUp(@Body() authSignUpDto: AuthSignUpDto) {
@@ -37,12 +38,18 @@ export class AuthController {
     @Post('refresh')
     @UseGuards(RefreshAuthGuard)
     refreshToken(@Request() request) {
-        return this.authService.refreshToken(request.user.sub, request.user.username);
+        return this.authService.refreshToken(request.user.userId);
     }
 
     @Get('me') // only accessible for authenticated users
     @UseGuards(JwtAuthGuard)
     getUserInfo(@Request() request) {
-        return request.user;
+        return this.userService.getUser(request.user.userId);
+    }
+
+    @Post('logout')
+    @UseGuards(RefreshAuthGuard)
+    logout(@Request() request) {
+        return this.authService.signOut(request.user.userId)
     }
 }

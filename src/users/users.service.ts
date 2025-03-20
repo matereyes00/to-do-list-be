@@ -10,9 +10,20 @@ export class UsersService {
         return this.prisma.user.findMany();
     }
 
-    // async getUser(userId: number) {
-    //   return this.prisma.user.findUnique({ where: { userId:userId } });
-    // }
+    async getUser(userId: number) {
+      return this.prisma.user.findUnique({ where: { userId:userId } });
+    }
+    
+    async updateHashedRefreshToken(userId: number, hashedRefToken: string | null | undefined) {
+        return await this.prisma.user.update({
+            where: {
+                userId: userId,
+              },
+              data: {
+                hashedRefreshToken: hashedRefToken,
+              },
+        })
+    }
 
     async getUserByName(username: string) {
         return this.prisma.user.findUnique({
