@@ -14,26 +14,31 @@ datasource db {
 }
 
 model User {
-  userId   Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-  hashedRefreshToken String?  @default("")
-  username String @unique
-  lists     List[]
+  userId             Int        @id @default(autoincrement())
+  email              String     @unique
+  password           String
+  hashedRefreshToken String?    @default("")
+  username           String     @unique
+  lists              List[]
+  ListItem           ListItem[]
 }
 
 model List {
-  id       Int      @id @default(autoincrement())
-  title    String
-  status   Boolean
-  items    String[] //@unique
-  listUser User     @relation(fields: [listUserId], references: [userId])
+  id         Int        @id @default(autoincrement())
+  title      String
+  status     Boolean
+  items      String[] //@unique
+  listUser   User       @relation(fields: [listUserId], references: [userId])
   listUserId Int
+  ListItem   ListItem[]
 }
 
-// model ListItem {
-//   list       List    @relation(fields: [itemId], references: [id])
-//   itemId     Int     @id @default(autoincrement())
-//   itemTitle  String
-//   itemStatus Boolean
-// }
+model ListItem {
+  itemId       Int     @id @default(autoincrement())
+  itemTitle    String
+  itemStatus   Boolean
+  userId       Int
+  listId       Int
+  listItemUser User    @relation(fields: [userId], references: [userId])
+  list         List    @relation(fields: [listId], references: [id])
+}
