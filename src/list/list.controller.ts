@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Post, UseGuards, Req, Param } from '@nestjs/common';
+import { Controller, Get, Body, Post, UseGuards, Req, Param, Delete } from '@nestjs/common';
 import { ListService } from './list.service';
 import { ListDto } from './dto/list.dto';
 import { JwtAuthGuard } from '../auth/guards/auth-jwt.guard';
@@ -34,5 +34,18 @@ export class ListController {
         return this.listService.createList(
             dto.title, dto.status, userId,
         );
+    }
+
+    @Delete('delete_list/:id')
+    async DeleteList(
+        @Req() req: AuthenticatedRequest,
+        @Param('id') id: number
+    ) {
+        const userId = req.user?.userId;
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+        const list_id = Number(id)
+        return this.listService.DeleteList(list_id)
     }
 }
