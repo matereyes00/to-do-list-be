@@ -54,4 +54,39 @@ export class ListItemService {
 
         return {message: `Item ${id} from list ${list_id} deleted!`}
     }
+
+    async EditListItem(
+        list_id:number, 
+        item_id: number, 
+        edited_item_title: string,
+        edited_item_status: boolean,
+    ) {
+        const list = await this.prismaService.list.findUnique({
+            where: {
+                id:list_id
+            }
+        })
+
+        if (edited_item_title) {
+            await this.prismaService.listItem.update({
+                where : {itemId:item_id, listId:list_id},
+                data : {itemTitle:edited_item_title}
+            })
+            const msg = `Edited item ${item_id} from list "${list?.title}" to: ${edited_item_title}`
+            return {message: msg};
+        }
+        if (edited_item_status) {
+            await this.prismaService.listItem.update({
+                where : {itemId:item_id, listId:list_id},
+                data : {itemStatus:edited_item_status}
+            })
+            const msg = `Edited item ${item_id} from list "${list?.title}" to: ${edited_item_status}`
+            return {message: msg};
+        }
+        
+        
+        return {
+            message: `No edits were made.`
+        }
+    }
 }

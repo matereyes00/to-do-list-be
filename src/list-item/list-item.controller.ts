@@ -5,12 +5,14 @@ import { Controller, UseGuards,
     Body,
     Get,
     Req,
-    Delete, } from '@nestjs/common';
+    Delete,
+    Patch, } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/auth-jwt.guard';
 import { ListService } from 'src/list/list.service';
 import { ListItemService } from './list-item.service';
 import { CreateListItemDto } from './dto/create.list.item.dto';
 import { AuthenticatedRequest } from 'src/auth/dto/auth.req';
+import { EditListItemDto } from './dto/edit.list.item.dto';
 
 @Controller('list-item')
 @UseGuards(JwtAuthGuard)
@@ -61,5 +63,20 @@ export class ListItemController {
         }
         
         return this.listItemService.DeleteListItem(userId, list_id, itemId);
+    }
+
+    @Patch('editListItem/:list/:id')
+    editListItem( 
+        @Request() request: AuthenticatedRequest, 
+        @Param('list') list: number, 
+        @Param('id') id: number, 
+        @Body() dto: EditListItemDto) {
+        const userId = request.user?.userId;
+        const list_id = Number(list)
+        const itemId = Number(id)
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+        return this.listItemService.EditListItem(list_id, itemId, dto.itemName, dto.itemStatus)
     }
 }
