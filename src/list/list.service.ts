@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SearchListDto } from './dto/search.list.dto';
-import { title } from 'process';
 
 @Injectable()
 export class ListService {
@@ -48,6 +47,35 @@ export class ListService {
         
         return {
             message: `List [${list?.title}] was deleted`
+        }
+    }
+
+    async EditList(listId:number, 
+        edited_list_title:string,
+        edited_list_status:boolean,
+    ) {
+        const list = await this.prismaService.list.findUnique({
+            where : {
+                id: listId
+            }
+        })
+        if(edited_list_status) {
+            await this.prismaService.list.update({
+                where : {id:listId},
+                data : {status:edited_list_status}
+            })
+            const msg = `Edited title of ${list?.id} to "${list?.status}"`
+            return { message: msg}
+        } else if (edited_list_title) {
+            await this.prismaService.list.update({
+                where : {id:listId},
+                data : {title:edited_list_title}
+            })
+            const msg = `Edited title of ${list?.id} to "${list?.title}"`
+            return { message: msg};
+        }
+        return {
+            message: `No edits to ${list?.title} were made.`
         }
     }
 }
