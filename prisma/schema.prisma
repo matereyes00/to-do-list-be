@@ -27,7 +27,6 @@ model List {
   id         Int        @id @default(autoincrement())
   title      String
   status     Boolean
-  items      String[] //@unique
   listUser   User       @relation(fields: [listUserId], references: [userId])
   listUserId Int
   ListItem   ListItem[]
