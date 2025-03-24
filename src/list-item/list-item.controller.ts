@@ -1,9 +1,7 @@
 import { Controller, UseGuards,
     Request,
-    HttpCode,
-    NotImplementedException,
     Post,
-    HttpStatus,
+    Param,
     Body,
     Get,
     Req,
@@ -21,6 +19,17 @@ export class ListItemController {
         private listService: ListService, 
         private listItemService: ListItemService) {}
 
+    @Get('getListItems/:id')
+    getListItems(@Req() req: AuthenticatedRequest, @Param('id') id:number) {
+        const userId = req.user?.userId;
+        const listId = Number(id)
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+
+        return this.listItemService.getListItems(userId,listId)
+    }
+
     @Post('createListItem')
     createListItem(
         @Request() request: AuthenticatedRequest, 
@@ -33,5 +42,24 @@ export class ListItemController {
         return this.listItemService.createListItem(
             userId,  dto.itemName, dto.itemStatus ?? false, dto.listId, 
         );
+    }
+
+    @Delete('deleteListItem/:list/:id')
+    deleteListItem(
+        @Request() request: AuthenticatedRequest, 
+        @Param('list') list: number, @Param('id') id: number
+    ) {
+        const userId = request.user?.userId;
+        const list_id = Number(list)
+        const itemId = Number(id)
+
+        if (!userId) {
+            throw new Error('User not authenticated');
+        }
+        if (!(list_id) || !(itemId)) {
+            throw new Error('Invalid list or item ID');
+        }
+        
+        return this.listItemService.DeleteListItem(userId, list_id, itemId);
     }
 }
