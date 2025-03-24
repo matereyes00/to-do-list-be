@@ -97,3 +97,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+# Postman Set-up
+Start in the Authentication folder.  Generate refresh token and access token first by signing up and logging in. Set the expire date/time in the .env file. After access_token experires, generate a new one under Authentication/Refresh Access Token using your refresh token generated in Authentication/login.
