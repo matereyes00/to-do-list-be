@@ -7,9 +7,7 @@ import {
     HttpStatus,
     Body,
     Get,
-    Req,
     UseGuards,
-    Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
@@ -23,6 +21,11 @@ export class AuthController {
     constructor(
         private userService: UsersService,
         private authService: AuthService) {}
+
+    @Get('getMsg')
+    getMessage() {
+        return {message: 'Successfully connected nestjs BE to react FE!'}
+    }
 
     @Post('signUp')
     signUp(@Body() authSignUpDto: AuthSignUpDto) {
